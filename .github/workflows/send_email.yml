@@ -1,0 +1,26 @@
+name: Send Scheduled Email
+
+on:
+  schedule:
+    - cron: "0 9 * * *"   # Runs daily at 9:00 UTC
+  workflow_dispatch:       # allows manual run
+
+jobs:
+  send-email:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run script
+        env:
+          EMAIL: ${{ secrets.EMAIL }}
+          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
+          RECEIVER: ${{ secrets.RECEIVER }}
+        run: python test.py
